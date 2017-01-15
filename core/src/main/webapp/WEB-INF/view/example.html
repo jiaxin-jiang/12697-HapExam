@@ -1,0 +1,55 @@
+<#include "include/header.html">
+<body>
+    <div id="grid"></div>
+<script>
+    $("#grid").kendoGrid({
+        toolbar: [{
+            name: "create",
+            template: '<span class="btn btn-primary k-grid-add">#=text#</span>'
+        }, {
+            name: "save",
+            template: '<span class="btn btn-success k-grid-save-changes">#=text#</span>'
+        }, {
+            name: "cancel",
+            template: '<span class="btn btn-default k-grid-cancel-changes">#=text#</span>'
+        },
+            {
+                template: '<span id="delete" class="btn btn-danger">删除</span>'
+            }],
+        columns: [
+            {field: "languageId"},
+            {field: "name"},
+            {field: "lastUpdate"}
+        ],
+        dataSource:{
+            transport:{
+                read:{
+                    url: "${base.contextPath}/hbiLanguage/select",
+                    type: "GET",
+                    dataType: "json"
+                },
+
+        },
+        schema: {
+            data: "rows",
+            model : {
+                languageId:"languageId",
+                name:"name",
+                lastUpdate:"lastUpdate"
+            }
+        },
+            serverPaging: true,
+            pageSize: 5
+        },
+        rowNumber: true,
+        selectable: "multiple rowbox",
+        editable: true,
+        pageable: {
+            pageSizes: ['All', 5, 10, 20, 50],
+            refresh: true,
+            buttonCount: 5
+        }
+    });
+</script>
+</body>
+</html>

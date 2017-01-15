@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hap.mapper.HapOmOrderInfoMapper">
+    <resultMap id="hapOmOrderInfoMapper" type="com.hap.dto.HapOmOrderInfo">
+        <result column="INVENTORY_ITEM_ID" jdbcType="BIGINT" property="inventoryItemId"/>
+        <result column="ITEM_CODE" jdbcType="VARCHAR" property="itemCode"/>
+        <result column="ITEM_DESCRIPTION" jdbcType="VARCHAR" property="itemDescription"/>
+        <result column="ORDER_NUMBER" jdbcType="VARCHAR" property="orderNumber"/>
+        <result column="COMPANY_ID" jdbcType="BIGINT" property="companyId"/>
+        <result column="ORDER_DATE" jdbcType="TIMESTAMP" property="orderDate"/>
+        <result column="ORDER_STATUS" jdbcType="VARCHAR" property="orderStatus"/>
+        <result column="CUSTOMER_ID" jdbcType="BIGINT" property="customerId"/>
+        <result column="CUSTOMER_NAME" jdbcType="VARCHAR" property="customerName" />
+        <result column="LINE_ID" jdbcType="BIGINT" property="lineId"/>
+        <result column="HEADER_ID" jdbcType="BIGINT" property="headerId"/>
+        <result column="COMPANY_ID" jdbcType="BIGINT" property="companyId"/>
+        <result column="COMPANY_NAME" jdbcType="VARCHAR" property="companyName"/>
+        <result column="order_Count" property="orderMoney"></result>
+    </resultMap>
+
+    <select id="selectHapOmOrderInfo" parameterType="com.hap.dto.HapOmOrderInfo" resultMap="hapOmOrderInfoMapper">
+        SELECT * from (
+        SELECT
+        orders.HEADER_ID,
+        orders.LINE_ID,
+        orders.ORDER_NUMBER,
+        orders.COMPANY_ID,
+        company.COMPANY_NAME,
+        orders.CUSTOMER_ID,
+        customer.CUSTOMER_NAME,
+        orders.ORDER_DATE,
+        orders.ORDER_STATUS,
+        orders.INVENTORY_ITEM_ID,
+        orders.ITEM_DESCRIPTION,
+        orders.ITEM_CODE,
+        (
+        orders.orderd_Quantity * orders.unit_Selling_Price
+        ) order_Count
+        FROM(
+        SELECT
+        head.HEADER_ID,
+        head.COMPANY_ID,
+        head.CUSTOMER_ID,
+        head.ORDER_DATE,
+        head.ORDER_STATUS,
+        head.ORDER_NUMBER,
+        line.LINE_ID,
+        line.INVENTORY_ITEM_ID,
+        orderd_Quantity,
+        unit_Selling_Price,
+        item.ITEM_DESCRIPTION,
+        item.ITEM_CODE
+        FROM
+        hap_om_order_headers head,
+        hap_om_order_lines line,
+        hap_inv_inventory_items item
+        WHERE
+        head.header_id = line.header_id
+        and line.INVENTORY_ITEM_ID = item.INVENTORY_ITEM_ID
+        ) orders,
+        hap_ar_customers customer,
+        hap_org_companys company
+        WHERE
+        orders.CUSTOMER_ID = customer.CUSTOMER_ID
+        AND company.COMPANY_ID = orders.COMPANY_ID) o
+        where 1=1
+        <if test="companyId != null">
+            AND o.COMPANY_ID=#{companyId}
+        </if>
+        <if test="customerId != null">
+            AND o.CUSTOMER_ID=#{customerId}
+        </if>
+        <if test="orderNumber != null">
+            AND o.ORDER_NUMBER=#{orderNumber}
+        </if>
+        <if test="inventoryItemId != null">
+            AND o.INVENTORY_ITEM_ID=#{inventoryItemId}
+        </if>
+        <if test="orderStatus != null">
+            AND o.ORDER_STATUS=#{orderStatus}
+        </if>
+    </select>
+</mapper>

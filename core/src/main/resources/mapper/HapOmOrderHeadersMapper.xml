@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hap.mapper.HapOmOrderHeadersMapper">
+  <resultMap id="hapOmOrderHeadersMapper" type="com.hap.dto.HapOmOrderHeaders">
+    <id column="HEADER_ID" jdbcType="BIGINT" property="headerId" />
+    <result column="ORDER_NUMBER" jdbcType="VARCHAR" property="orderNumber" />
+    <result column="COMPANY_ID" jdbcType="BIGINT" property="companyId" />
+    <result column="ORDER_DATE" jdbcType="TIMESTAMP" property="orderDate" />
+    <result column="ORDER_STATUS" jdbcType="VARCHAR" property="orderStatus" />
+    <result column="CUSTOMER_ID" jdbcType="BIGINT" property="customerId" />
+    </resultMap>
+
+  <select id="selectByOrderNumber" parameterType="java.lang.String" resultType="java.lang.Integer">
+    SELECT COUNT(1) FROM `hap_om_order_headers` WHERE `ORDER_NUMBER`=#{orderNumber}
+  </select>
+</mapper>

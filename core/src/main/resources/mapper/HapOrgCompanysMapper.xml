@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hap.mapper.HapOrgCompanysMapper">
+  <resultMap id="hapOrgCompanysMapper" type="com.hap.dto.HapOrgCompanys">
+    <id column="COMPANY_ID" jdbcType="BIGINT" property="companyId" />
+    <result column="COMPANY_NUMBER" jdbcType="VARCHAR" property="companyNumber" />
+    <result column="COMPANY_NAME" jdbcType="VARCHAR" property="companyName" />
+    <result column="ENABLED_FLAG" jdbcType="VARCHAR" property="enabledFlag" />
+    </resultMap>
+  <select id="searchAll" resultMap="hapOrgCompanysMapper">
+    SELECT `COMPANY_ID`,`COMPANY_NUMBER`,`COMPANY_NAME`,`ENABLED_FLAG`
+    FROM `hap_org_companys`
+  </select>
+</mapper>
